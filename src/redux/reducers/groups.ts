@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice, PayloadAction, Slice} from "@reduxjs/toolkit";
-import {GetGroupsResponse, Group, GroupsState} from "../../types/interfaces";
+import {GetGroupsResponse, GroupsState} from "../../types/interfaces";
 import {SliceActions} from "@reduxjs/toolkit/dist/query/core/buildSlice";
 import $api from "../../api";
 

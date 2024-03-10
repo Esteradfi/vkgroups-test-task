@@ -1,16 +1,16 @@
 // Интерфейс ответа, приходящего с API
 export interface GetGroupsResponse {
     result: 1 | 0,
-    data?: Group[]
+    data?: GroupInterface[]
 }
 
 // Интерфейс слайса групп
 export interface GroupsState {
-    groupsList: Group[],
+    groupsList: GroupInterface[],
     isFetching: boolean
 }
 
-export interface Group {
+export interface GroupInterface {
     "id": number,
     "name": string,
     "closed": boolean,
