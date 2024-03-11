@@ -9,8 +9,8 @@ export const getGroupsThunk = createAsyncThunk(
     async () => {
         try {
             const response = await $api.get<GetGroupsResponse>(`/groups`);
-            console.log(response);
 
+            //Обработка на случай отсутствия data или result === 0
             if (response.data.result === 0 || !response.data.data) {
                 return [];
             }
@@ -33,7 +33,6 @@ const initialState: GroupsState = {
         avatar_colors: []
     },
     colorsList: [],
-    isFetching: false
 }
 
 export const GroupsSlice = createSlice({

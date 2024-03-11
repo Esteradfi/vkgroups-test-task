@@ -10,7 +10,6 @@ export interface GroupsState {
     filteredGroups: GroupInterface[],
     filters: Filters,
     colorsList: string[],
-    isFetching: boolean
 }
 
 // Интерфейс фильтров
