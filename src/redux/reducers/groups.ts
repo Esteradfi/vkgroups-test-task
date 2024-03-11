@@ -1,6 +1,5 @@
-import {createAsyncThunk, createSlice, PayloadAction, Slice} from "@reduxjs/toolkit";
-import {GetGroupsResponse, GroupsState} from "../../types/interfaces";
-import {SliceActions} from "@reduxjs/toolkit/dist/query/core/buildSlice";
+import {createAsyncThunk, createSlice, PayloadAction,} from "@reduxjs/toolkit";
+import {Friends, GetGroupsResponse, GroupsState, Privacy} from "../../types/interfaces";
 import $api from "../../api";
 
 export const getGroupsThunk = createAsyncThunk(
@@ -23,189 +22,14 @@ export const getGroupsThunk = createAsyncThunk(
 )
 
 const initialState: GroupsState = {
-    groupsList: [
-        {
-            "id": 1,
-            "name": "Котики",
-            "closed": false,
-            "avatar_color": "red",
-            "members_count": 457,
-            "friends": [
-                {
-                    "first_name": "Маша",
-                    "last_name": "Петрова"
-                },
-                {
-                    "first_name": "Фёдор",
-                    "last_name": "Агапов"
-                },
-                {
-                    "first_name": "Вера",
-                    "last_name": "Петрова"
-                }
-            ]
-        },
-        {
-            "id": 2,
-            "name": "Собачки",
-            "closed": false,
-            "avatar_color": "green",
-            "members_count": 147
-        },
-        {
-            "id": 3,
-            "name": "Бабочки",
-            "closed": true,
-            "avatar_color": "yellow",
-            "members_count": 2,
-            "friends": [
-                {
-                    "first_name": "Василий",
-                    "last_name": "Гончаров"
-                }
-            ]
-        },
-        {
-            "id": 4,
-            "name": "Утята",
-            "closed": false,
-            "avatar_color": "blue",
-            "members_count": 88,
-            "friends": [
-                {
-                    "first_name": "Маша",
-                    "last_name": "Пивоварова"
-                },
-                {
-                    "first_name": "Илья",
-                    "last_name": "Кот"
-                }
-            ]
-        },
-        {
-            "id": 5,
-            "name": "Мишки",
-            "closed": true,
-            "avatar_color": "red",
-            "members_count": 4
-        },
-        {
-            "id": 6,
-            "name": "Улитки",
-            "closed": true,
-            "members_count": 99,
-            "friends": [
-                {
-                    "first_name": "Маша",
-                    "last_name": "Петрова"
-                }
-            ]
-        },
-        {
-            "id": 7,
-            "name": "Выдры",
-            "closed": false,
-            "avatar_color": "purple",
-            "members_count": 5,
-            "friends": [
-                {
-                    "first_name": "Ирина",
-                    "last_name": "Харитонова"
-                },
-                {
-                    "first_name": "Владислав",
-                    "last_name": "Самсонов"
-                },
-                {
-                    "first_name": "Сергей",
-                    "last_name": "Антонов"
-                }
-            ]
-        },
-        {
-            "id": 8,
-            "name": "Зайки",
-            "closed": false,
-            "avatar_color": "white",
-            "members_count": 777
-        },
-        {
-            "id": 9,
-            "name": "Кролики",
-            "closed": true,
-            "avatar_color": "yellow",
-            "members_count": 8,
-            "friends": [
-                {
-                    "first_name": "Даша",
-                    "last_name": "Елец"
-                }
-            ]
-        },
-        {
-            "id": 10,
-            "name": "Утконосы",
-            "closed": true,
-            "members_count": 0
-        },
-        {
-            "id": 11,
-            "name": "Куропатки",
-            "closed": false,
-            "avatar_color": "red",
-            "members_count": 33,
-            "friends": [
-                {
-                    "first_name": "Зоя",
-                    "last_name": "Петрова"
-                },
-                {
-                    "first_name": "Марфа",
-                    "last_name": "Зайцева"
-                }
-            ]
-        },
-        {
-            "id": 12,
-            "name": "Козлики",
-            "closed": false,
-            "members_count": 7,
-            "friends": [
-                {
-                    "first_name": "Катя",
-                    "last_name": "Самсонова"
-                }
-            ]
-        },
-        {
-            "id": 13,
-            "name": "Тигры",
-            "closed": false,
-            "avatar_color": "orange",
-            "members_count": 11,
-            "friends": [
-                {
-                    "first_name": "Лев",
-                    "last_name": "Лещенко"
-                },
-                {
-                    "first_name": "Фёдор",
-                    "last_name": "Бондарчук"
-                },
-                {
-                    "first_name": "Вера",
-                    "last_name": "Брежнева"
-                }
-            ]
-        },
-        {
-            "id": 14,
-            "name": "Птички",
-            "closed": true,
-            "avatar_color": "blue",
-            "members_count": 23
-        }
-    ],
+    groupsList: [],
+    filteredGroups: [],
+    filters: {
+        privacy: "all",
+        friends: "all",
+        avatar_colors: []
+    },
+    colorsList: [],
     isFetching: false
 }
 
@@ -213,13 +37,52 @@ export const GroupsSlice = createSlice({
     name: 'Groups',
     initialState,
     reducers: {
+        changePrivacyMod: (state, action: PayloadAction<Privacy>) => {
+          state.filters.privacy = action.payload;
+        },
+        changeFriendsMod: (state, action: PayloadAction<Friends>) => {
+          state.filters.friends = action.payload;
+        },
+        changeColors: (state, action: PayloadAction<string>) => {
+            let actionColor = action.payload;
+            let indexColor = state.filters.avatar_colors.indexOf(actionColor);
 
+            if(indexColor !== -1) {
+                state.filters.avatar_colors.splice(indexColor, 1);
+            } else {
+                state.filters.avatar_colors.push(actionColor);
+            }
+        },
+        applyFilters: (state) => {
+            const { privacy, friends, avatar_colors } = state.filters;
+            const avatarColorsSet = new Set(avatar_colors);
+            state.filteredGroups = state.groupsList.filter(group => {
+                let groupColor = group.avatar_color || 'no color'; // Если у группы нет цвета, то присваиваем 'no color'
+                if (
+                    (privacy === "all" || (privacy === "opened" && !group.closed) || (privacy === "closed" && group.closed)) &&
+                    ((friends === "all") ||
+                        (friends === "yes" && group.friends && group.friends.length > 0) ||
+                        (friends === "no" && (!group.friends || group.friends.length === 0))) &&
+                    (avatar_colors.length === 0 || avatarColorsSet.has(groupColor))
+                ) {
+                    return true;
+                }
+                return false;
+            });
+        }
     },
     extraReducers: (builder) => {
         builder
             .addCase(getGroupsThunk.fulfilled, (state, action) => {
                 if (action.payload) {
-                    state.groupsList = action.payload;
+                    state.groupsList = state.filteredGroups = action.payload;
+
+                    state.colorsList = Array.from(new Set([
+                        ...action.payload
+                            .map((group: { avatar_color?: string }) => group.avatar_color)
+                            .filter((color: string | undefined): color is string => color !== undefined),
+                        "no color"
+                    ]));
                 }
             })
             .addCase(getGroupsThunk.rejected, (state, action) => {
@@ -232,4 +95,4 @@ export const GroupsSlice = createSlice({
 
 export default GroupsSlice.reducer;
 
-export const {}: SliceActions = GroupsSlice.actions;
+export const {changePrivacyMod, changeFriendsMod, applyFilters, changeColors} = GroupsSlice.actions;

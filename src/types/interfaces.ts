@@ -7,8 +7,20 @@ export interface GetGroupsResponse {
 // Интерфейс слайса групп
 export interface GroupsState {
     groupsList: GroupInterface[],
+    filteredGroups: GroupInterface[],
+    filters: Filters,
+    colorsList: string[],
     isFetching: boolean
 }
+
+export interface Filters {
+    privacy: Privacy,
+    friends: Friends,
+    avatar_colors: string[]
+}
+
+export type Privacy = 'all' | 'opened' | 'closed';
+export type Friends = 'all' | 'yes' | 'no';
 
 export interface GroupInterface {
     "id": number,
