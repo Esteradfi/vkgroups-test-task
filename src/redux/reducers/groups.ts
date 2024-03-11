@@ -33,12 +33,17 @@ const initialState: GroupsState = {
         avatar_colors: []
     },
     colorsList: [],
+    isFetching: true
 }
 
 export const GroupsSlice = createSlice({
     name: 'Groups',
     initialState,
     reducers: {
+        //Изменение статуса ожидания ответа на запрос
+        changeIsFetching: (state, action: PayloadAction<boolean>) => {
+            state.isFetching = action.payload;
+        },
         // Изменение фильтра по приватности
         changePrivacyMod: (state, action: PayloadAction<Privacy>) => {
           state.filters.privacy = action.payload;
@@ -90,6 +95,8 @@ export const GroupsSlice = createSlice({
                             .filter((color: string | undefined): color is string => color !== undefined),
                         "no color"
                     ]));
+
+                    state.isFetching = false;
                 }
             })
             .addCase(getGroupsThunk.rejected, (state, action) => {
@@ -102,4 +109,4 @@ export const GroupsSlice = createSlice({
 
 export default GroupsSlice.reducer;
 
-export const {changePrivacyMod, changeFriendsMod, applyFilters, changeColors} = GroupsSlice.actions;
+export const {changeIsFetching, changePrivacyMod, changeFriendsMod, applyFilters, changeColors} = GroupsSlice.actions;

@@ -14,11 +14,13 @@ import {FC, useEffect} from "react";
 import {GroupInterface} from "./types/interfaces";
 import GroupWrapper from "./components/GroupWrapper/GroupWrapper";
 import Filters from "./components/Filters/Filters";
-import {getGroupsThunk} from "./redux/reducers/groups";
+import {changeIsFetching, getGroupsThunk} from "./redux/reducers/groups";
+import Preloader from "./components/Preloader/Preloader";
 
 const App: FC = () => {
   const dispatch = useAppDispatch();
   const platform = usePlatform();
+  const isFetching = useAppSelector(state => state.groups.isFetching);
   const groups: GroupInterface[] = useAppSelector(state => state.groups.filteredGroups);
 
   const groupsItems = groups.length > 0 ? groups.map((group: GroupInterface) => <GroupWrapper key={group.id} group={group} />) : 'Группы не найдены';
@@ -26,6 +28,7 @@ const App: FC = () => {
   //Отправка запроса на получение групп
   useEffect(() => {
     dispatch(getGroupsThunk());
+    dispatch(changeIsFetching(true));
   }, [])
 
   return (
@@ -35,8 +38,7 @@ const App: FC = () => {
             <View activePanel="main">
               <Panel id="main">
                 <PanelHeader>Группы</PanelHeader>
-                <Filters />
-                {groupsItems}
+                {isFetching ? <Preloader /> : <><Filters />{groupsItems}</>}
               </Panel>
             </View>
           </SplitCol>
