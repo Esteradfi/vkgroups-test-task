@@ -8,11 +8,13 @@ const GroupWrapper = ({group}: { group: GroupInterface }) => {
     const onClose = () => setPopout(null);
     const baseTargetRef = React.useRef<HTMLDivElement>(null);
 
+    // Список друзей, подписанных на группу
     const friendsItems = group.friends ? group.friends.map((friend: User) => <ActionSheetItem
         key={friend.first_name + friend.last_name} onClick={onClose}>
         {friend.first_name} {friend.last_name}
     </ActionSheetItem>) : null;
 
+    // Функция для открытия блока со списком друзей
     const openBase = () => {
         setPopout(
             <ActionSheet onClose={onClose} toggleRef={baseTargetRef} style={{zIndex: 1}}>

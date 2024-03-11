@@ -13,6 +13,7 @@ export interface GroupsState {
     isFetching: boolean
 }
 
+// Интерфейс фильтров
 export interface Filters {
     privacy: Privacy,
     friends: Friends,

@@ -20,11 +20,13 @@ const App: FC = () => {
   const dispatch = useAppDispatch();
   const platform = usePlatform();
   const groups: GroupInterface[] = useAppSelector(state => state.groups.filteredGroups);
+
   const groupsItems = groups.length > 0 ? groups.map((group: GroupInterface) => <GroupWrapper key={group.id} group={group} />) : 'Группы не найдены';
 
-  // useEffect(() => {
-  //   dispatch(getGroupsThunk());
-  // }, [])
+  //Отправка запроса на получение групп
+  useEffect(() => {
+    dispatch(getGroupsThunk());
+  }, [])
 
   return (
       <AppRoot>

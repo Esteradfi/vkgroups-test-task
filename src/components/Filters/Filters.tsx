@@ -12,22 +12,27 @@ const Filters: FC = () => {
     const allColors: string[] = useAppSelector(state => state.groups.colorsList);
     const selectedColors: string[] = useAppSelector(state => state.groups.filters.avatar_colors);
 
+    // Изменение фильтра по приватности
     const onChangePrivacyMod = (e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(changePrivacyMod(e.target.value as Privacy));
     };
 
+    // Изменение фильтра по наличию друзей в группе
     const onChangeFriendsMod = (e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(changeFriendsMod(e.target.value as Friends));
     }
 
+    // Изменение фильтра по цвету
     const onChangeSelectedColors = (e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(changeColors(e.target.value));
     }
 
+    // Сохранение выбранных фильтров
     const onApplyFilters = () => {
         dispatch(applyFilters());
     }
 
+    // Вывод чекбоксов с цветами
     const allColorsItems = allColors.length > 0 ? allColors.map((color: string) => <Checkbox key={color}
                                                                                              value={color}
                                                                                              onChange={onChangeSelectedColors}
